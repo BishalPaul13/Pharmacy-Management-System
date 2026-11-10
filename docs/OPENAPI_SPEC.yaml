@@ -1,0 +1,187 @@
+openapi: 3.0.0
+info:
+  title: MediCare Pharmacy Management System API
+  version: 1.0.0
+  description: >
+    Production-grade enterprise REST API for pharmacy management operations,
+    including FEFO automated batch allocation, expired batch blocking, POS checkout,
+    stock adjustment auditing, perpetual inventory reconciliation, and server-side RBAC.
+servers:
+  - url: /api/v1
+    description: Primary API Gateway v1
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    LoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+          example: admin
+        password:
+          type: string
+          example: admin123
+    SaleRequest:
+      type: object
+      required: [items, amountPaid]
+      properties:
+        customerName:
+          type: string
+          example: Alice Smith
+        customerPhone:
+          type: string
+          example: "+1-555-0199"
+        doctorName:
+          type: string
+          example: Dr. Gregory House
+        paymentMethod:
+          type: string
+          enum: [CASH, CARD, UPI, INSURANCE]
+          default: CASH
+        amountPaid:
+          type: number
+          example: 100.00
+        discount:
+          type: number
+          example: 0.00
+        items:
+          type: array
+          items:
+            type: object
+            required: [medicineId, quantity]
+            properties:
+              medicineId:
+                type: integer
+                example: 1
+              batchId:
+                type: integer
+                description: Optional. If omitted, system allocates using FEFO algorithm.
+                example: 1
+              quantity:
+                type: integer
+                example: 5
+              unitPrice:
+                type: number
+                example: 22.00
+    AdjustmentRequest:
+      type: object
+      required: [type, batchId, quantity, reason]
+      properties:
+        type:
+          type: string
+          enum: [CUSTOMER_RETURN, SUPPLIER_RETURN, EXPIRED_DISPOSAL, DAMAGED_WRITE_OFF, PHYSICAL_AUDIT_CORRECTION]
+        batchId:
+          type: integer
+          example: 1
+        quantity:
+          type: integer
+          description: Positive for additions; negative for reductions
+          example: -3
+        reason:
+          type: string
+          minLength: 3
+          example: Water damaged blister packs discarded after warehouse leak
+paths:
+  /auth/login:
+    post:
+      summary: User login & JWT issuance
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: Successful authentication
+        401:
+          description: Invalid credentials
+  /medicines:
+    get:
+      summary: Retrieve medicines catalogue with current stock and alert states
+      tags: [Medicines]
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: categoryId
+          in: query
+          schema:
+            type: integer
+        - name: lowStock
+          in: query
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: Catalogue list retrieved
+  /medicines/{id}/fefo:
+    get:
+      summary: Preview FEFO batch allocation for requested quantity
+      tags: [Inventory & FEFO]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: quantity
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: FEFO batch plan generated
+        422:
+          description: Insufficient valid stock or expired batches excluded
+  /sales:
+    post:
+      summary: Atomic checkout & invoice creation (FEFO batch deduction)
+      security:
+        - bearerAuth: []
+      tags: [Sales & POS]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleRequest'
+      responses:
+        201:
+          description: Sale completed & invoice generated
+        422:
+          description: Expired batch blocked or insufficient stock
+  /adjustments:
+    post:
+      summary: Record stock adjustment or return (Mandatory reason required)
+      security:
+        - bearerAuth: []
+      tags: [Adjustments & Returns]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdjustmentRequest'
+      responses:
+        201:
+          description: Adjustment recorded and ledger updated
+        422:
+          description: Negative stock prevented
+  /reports/reconciliation:
+    get:
+      summary: Perpetual stock reconciliation audit (Opening + Purchases - Sales +/- Adjustments = Closing)
+      security:
+        - bearerAuth: []
+      tags: [Reports & Audit]
+      responses:
+        200:
+          description: Full reconciliation report proving zero discrepancies

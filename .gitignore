@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+Thumbs.db
+server/database/*.db
+server/database/*.db-wal
+server/database/*.db-shm
+.env
