@@ -73,3 +73,4 @@ router.post('/', authenticate, authorize('ADMIN', 'PHARMACIST'), validate(purcha
 });
 
 module.exports = router;
+

@@ -56,6 +56,7 @@ function login(username, password, ip = '127.0.0.1') {
       id: user.id,
       username: user.username,
       fullName: user.full_name,
+      full_name: user.full_name,
       role: user.role,
       email: user.email,
       phone: user.phone,
@@ -72,7 +73,10 @@ function getCurrentUser(userId) {
     err.code = 'USER_NOT_FOUND';
     throw err;
   }
-  return user;
+  return {
+    ...user,
+    fullName: user.full_name,
+  };
 }
 
 module.exports = {

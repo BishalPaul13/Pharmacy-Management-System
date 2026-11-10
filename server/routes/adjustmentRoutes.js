@@ -65,3 +65,4 @@ router.post('/', authenticate, authorize('ADMIN', 'PHARMACIST'), validate(adjust
 });
 
 module.exports = router;
+

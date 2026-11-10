@@ -181,3 +181,4 @@ CREATE INDEX IF NOT EXISTS idx_stock_ledger_batch ON stock_ledger(batch_id);
 CREATE INDEX IF NOT EXISTS idx_stock_ledger_medicine ON stock_ledger(medicine_id);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_action ON audit_logs(action);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_created ON audit_logs(created_at);
+

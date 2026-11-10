@@ -490,3 +490,4 @@ export function Purchases() {
     </div>
   );
 }
+

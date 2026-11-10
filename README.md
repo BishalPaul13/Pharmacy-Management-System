@@ -147,3 +147,4 @@ Pharmacy Management System (Modular Monolith)
 ## 8. Regulatory & Safety Disclaimer
 
 **Notice:** All medicine names, generic compositions, dosages, batch identifiers, customer profiles, and supplier credentials in this application are **entirely fictional** and generated for software engineering demonstration and evaluation purposes. This system does not diagnose conditions, dispense medical advice, or replace licensed pharmacists and physicians.
+

@@ -165,3 +165,4 @@ export function PrintableInvoice({ sale, onClose }) {
     </div>
   );
 }
+

@@ -1,31 +1,54 @@
-import React, { useState } from 'react';
-import { Pill, Shield, Lock, User, AlertCircle, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Pill, Shield, Lock, User, AlertCircle, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export function Login() {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('admin123');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  // If already authenticated, redirect to dashboard
+  useEffect(() => {
+    if (user) {
+      navigate('/', { replace: true });
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setError('');
     setLoading(true);
     try {
       await login(username, password);
+      setSuccess(true);
+      navigate('/', { replace: true });
     } catch (err) {
-      setError(err.message || 'Authentication failed');
+      setError(err.message || 'Authentication failed. Please verify credentials.');
     } finally {
       setLoading(false);
     }
   };
 
-  const setCredentials = (u, p) => {
+  const handleQuickLogin = async (u, p) => {
     setUsername(u);
     setPassword(p);
     setError('');
+    setLoading(true);
+    try {
+      await login(u, p);
+      setSuccess(true);
+      navigate('/', { replace: true });
+    } catch (err) {
+      setError(err.message || 'Authentication failed. Please verify credentials.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,6 +69,13 @@ export function Login() {
             <div className="mb-4 p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-center space-x-2 text-rose-700 text-sm">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
+            </div>
+          )}
+
+          {success && (
+            <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center space-x-2 text-emerald-800 text-sm">
+              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+              <span>Authentication verified! Redirecting to operational portal...</span>
             </div>
           )}
 
@@ -87,9 +117,9 @@ export function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-sm transition shadow-sm flex items-center justify-center space-x-2 disabled:opacity-50"
+              className="w-full mt-2 py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-sm transition shadow-sm flex items-center justify-center space-x-2 disabled:opacity-50 cursor-pointer"
             >
-              <span>{loading ? 'Authenticating...' : 'Sign In to Portal'}</span>
+              <span>{loading ? 'Authenticating & Loading...' : 'Sign In to Portal'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
@@ -97,34 +127,49 @@ export function Login() {
           {/* Quick Demo Credentials Preset */}
           <div className="mt-6 pt-6 border-t border-slate-100">
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-center mb-3">
-              One-Click Reviewer Demo Credentials
+              Instant One-Click Reviewer Sign In
             </p>
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
-                onClick={() => setCredentials('admin', 'admin123')}
-                className="p-2 text-left bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-xl transition"
+                onClick={() => handleQuickLogin('admin', 'admin123')}
+                disabled={loading}
+                className="p-2 text-left bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-xl transition cursor-pointer"
+                title="Click to instantly sign in as Administrator"
               >
-                <div className="font-semibold text-xs text-purple-900">Admin</div>
+                <div className="font-semibold text-xs text-purple-900 flex items-center justify-between">
+                  <span>Admin</span>
+                  <ArrowRight className="w-3 h-3 text-purple-600" />
+                </div>
                 <div className="text-[10px] text-purple-700 font-mono mt-0.5">admin / admin123</div>
               </button>
 
               <button
                 type="button"
-                onClick={() => setCredentials('pharmacist', 'pharm123')}
-                className="p-2 text-left bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl transition"
+                onClick={() => handleQuickLogin('pharmacist', 'pharm123')}
+                disabled={loading}
+                className="p-2 text-left bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl transition cursor-pointer"
+                title="Click to instantly sign in as Pharmacist"
               >
-                <div className="font-semibold text-xs text-blue-900">Pharmacist</div>
-                <div className="text-[10px] text-blue-700 font-mono mt-0.5">pharmacist / pharm123</div>
+                <div className="font-semibold text-xs text-blue-900 flex items-center justify-between">
+                  <span>Pharmacist</span>
+                  <ArrowRight className="w-3 h-3 text-blue-600" />
+                </div>
+                <div className="text-[10px] text-blue-700 font-mono mt-0.5">pharm / pharm123</div>
               </button>
 
               <button
                 type="button"
-                onClick={() => setCredentials('cashier', 'cash123')}
-                className="p-2 text-left bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition"
+                onClick={() => handleQuickLogin('cashier', 'cash123')}
+                disabled={loading}
+                className="p-2 text-left bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition cursor-pointer"
+                title="Click to instantly sign in as Cashier"
               >
-                <div className="font-semibold text-xs text-emerald-900">Cashier</div>
-                <div className="text-[10px] text-emerald-700 font-mono mt-0.5">cashier / cash123</div>
+                <div className="font-semibold text-xs text-emerald-900 flex items-center justify-between">
+                  <span>Cashier</span>
+                  <ArrowRight className="w-3 h-3 text-emerald-600" />
+                </div>
+                <div className="text-[10px] text-emerald-700 font-mono mt-0.5">cash / cash123</div>
               </button>
             </div>
           </div>

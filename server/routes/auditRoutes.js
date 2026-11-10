@@ -65,3 +65,4 @@ router.get('/', authenticate, authorize('ADMIN'), (req, res, next) => {
 });
 
 module.exports = router;
+

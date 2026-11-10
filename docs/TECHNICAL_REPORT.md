@@ -106,3 +106,4 @@ Automated tests in `tests/acceptance.test.js` verify all acceptance requirements
 - **Test 6:** Stock report reconciles with opening stock, purchases, sales, and adjustments — **PASSED**
 - **Test 7:** Negative stock prevention on over-sell and excessive adjustment — **PASSED**
 - **Test 8:** Server-side RBAC authorization strictly blocks unprivileged roles — **PASSED**
+

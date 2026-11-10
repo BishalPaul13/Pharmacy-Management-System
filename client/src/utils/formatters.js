@@ -69,3 +69,4 @@ export function getExpiryBadgeInfo(expiryDate, status = 'ACTIVE') {
   }
   return { label: `Healthy: ${days}d`, color: 'bg-emerald-100 text-emerald-800 border-emerald-300' };
 }
+

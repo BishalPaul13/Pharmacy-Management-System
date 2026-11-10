@@ -84,3 +84,4 @@ router.post('/', authenticate, authorize('ADMIN', 'PHARMACIST', 'CASHIER'), vali
 });
 
 module.exports = router;
+

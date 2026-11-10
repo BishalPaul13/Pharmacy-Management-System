@@ -90,3 +90,4 @@ This script guides the reviewer or presenter through an end-to-end operational w
   > *"To summarize, MediCare PMS delivers a complete, responsive, database-backed application that satisfies all business and technical criteria.*
   > *All 16 unit and integration tests covering FEFO deduction, expired batch blocking, negative stock prevention, and server-side RBAC pass with 100% success.*
   > *The entire system runs locally via a single command with zero external dependencies. Thank you!"*
+

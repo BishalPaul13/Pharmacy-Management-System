@@ -65,3 +65,4 @@ router.patch('/:id/status', authenticate, authorize('ADMIN', 'PHARMACIST'), vali
 });
 
 module.exports = router;
+

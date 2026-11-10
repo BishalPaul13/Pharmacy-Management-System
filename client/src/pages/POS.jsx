@@ -520,3 +520,4 @@ export function POS() {
     </div>
   );
 }
+

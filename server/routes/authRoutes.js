@@ -28,7 +28,15 @@ router.post('/login', validate(loginSchema), (req, res, next) => {
 router.get('/me', authenticate, (req, res) => {
   res.json({
     success: true,
-    data: req.user,
+    data: {
+      id: req.user.id,
+      username: req.user.username,
+      fullName: req.user.full_name,
+      full_name: req.user.full_name,
+      role: req.user.role,
+      email: req.user.email,
+      phone: req.user.phone,
+    },
   });
 });
 

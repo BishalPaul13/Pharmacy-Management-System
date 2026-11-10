@@ -199,3 +199,4 @@ erDiagram
 3. **Perpetual Inventory Reconciliation:**
    - The immutable `stock_ledger` table captures the exact delta and post-transaction balance for every single business action (`PURCHASE`, `SALE`, `CUSTOMER_RETURN`, `SUPPLIER_RETURN`, `EXPIRED_DISPOSAL`, `DAMAGED_WRITE_OFF`, `AUDIT_ADJUSTMENT`).
    - The perpetual formula `Opening + Purchases - Sales + CustomerReturns - SupplierReturns - Disposals/Damaged +/- AuditAdjustments = Closing Stock` guarantees 100% mathematical auditability.
+

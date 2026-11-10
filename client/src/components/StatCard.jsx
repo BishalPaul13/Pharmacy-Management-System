@@ -48,3 +48,4 @@ export function StatCard({ title, value, subtitle, icon: Icon, color = 'emerald'
     </div>
   );
 }
+

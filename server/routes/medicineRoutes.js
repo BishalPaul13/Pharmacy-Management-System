@@ -102,3 +102,4 @@ router.put('/:id', authenticate, authorize('ADMIN', 'PHARMACIST'), (req, res, ne
 });
 
 module.exports = router;
+

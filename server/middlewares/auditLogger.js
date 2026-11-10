@@ -24,3 +24,4 @@ function logAudit({ user, ip, action, entityType, entityId, details }) {
 }
 
 module.exports = { logAudit };
+

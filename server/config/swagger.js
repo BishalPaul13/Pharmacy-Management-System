@@ -268,3 +268,4 @@ function setupSwagger(app) {
 }
 
 module.exports = { setupSwagger, swaggerDocument };
+

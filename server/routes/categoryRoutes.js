@@ -71,3 +71,4 @@ router.post('/', authenticate, authorize('ADMIN', 'PHARMACIST'), validate(catego
 });
 
 module.exports = router;
+
