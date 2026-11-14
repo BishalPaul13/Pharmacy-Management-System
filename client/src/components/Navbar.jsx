@@ -1,5 +1,5 @@
 import React from 'react';
-import { LogOut, User, BookOpen, Shield, Bell } from 'lucide-react';
+import { LogOut, User, Shield, Bell } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export function Navbar() {
@@ -54,20 +54,8 @@ export function Navbar() {
 
       {/* Right User & System Controls */}
       <div className="flex items-center space-x-4">
-        {/* Swagger API docs shortcut */}
-        <a
-          href="/api/docs"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden md:flex items-center space-x-1 text-xs font-medium text-slate-500 hover:text-emerald-700 bg-slate-50 hover:bg-emerald-50 px-3 py-1.5 rounded-lg border border-slate-200 transition"
-          title="Open Swagger/OpenAPI Interactive Documentation"
-        >
-          <BookOpen className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Swagger API</span>
-        </a>
-
         {/* User Info & Badge */}
-        <div className="flex items-center space-x-3 pl-2 border-l border-slate-200">
+        <div className="flex items-center space-x-3">
           <div className="text-right hidden sm:block">
             <p className="text-sm font-semibold text-slate-800 leading-tight">{user?.fullName || user?.username}</p>
             <span className={`inline-block px-2 py-0.5 mt-0.5 rounded-md text-[10px] font-bold border ${roleColors[user?.role] || 'bg-slate-100 text-slate-700'}`}>
